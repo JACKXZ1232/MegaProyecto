@@ -7,12 +7,12 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     :root {
-      --primary: #2a7f5f;
-      --primary-light: #3faa85;
+      --primary: #2c6f4d;
+      --primary-light: #3d996a;
       --secondary: #f9a825;
-      --light: #ffffff;
-      --dark: #1a202c;
-      --gray: #64748b;
+      --light: #f8fbf7;
+      --dark: #2d3748;
+      --gray: #718096;
       --white: #ffffff;
       --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -27,26 +27,46 @@
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background-color: var(--light);
       color: var(--dark);
-      line-height: 1.6;
+      line-height: 1.7;
       overflow-x: hidden;
     }
 
-    /* Animaciones */
+    /* Accesibilidad: reduce motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Animaciones mejoradas */
     @keyframes float {
       0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-12px); }
     }
 
     @keyframes pulse {
-      0% { transform: scale(1); }
+      0%, 100% { transform: scale(1); }
       50% { transform: scale(1.03); }
-      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .hidden {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(20px);
       transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      will-change: opacity, transform;
     }
 
     .show {
@@ -54,39 +74,41 @@
       transform: translateY(0);
     }
 
-    /* Sidebar vertical */
+    /* Sidebar */
     .sidebar {
       position: fixed;
       top: 0;
       left: 0;
       height: 100vh;
       width: 80px;
-      background: linear-gradient(180deg, #f0f9ff, #e0f2fe);
-      border-right: 1px solid rgba(42, 127, 95, 0.1);
+      background: linear-gradient(180deg, #e6f4ff, #d0ebff);
+      border-right: 1px solid rgba(0,0,0,0.06);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px 0;
+      padding: 24px 0;
       z-index: 1000;
-      backdrop-filter: blur(10px);
-    }
-
-    .logo {
-      margin-bottom: 40px;
-      text-align: center;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .logo img {
       width: 60px;
-      animation: float 4s ease-in-out infinite;
+      animation: float 5s ease-in-out infinite;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(42, 127, 95, 0.15);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+      transition: transform 0.3s ease;
+    }
+
+    .logo img:hover {
+      transform: scale(1.05);
     }
 
     .nav-links {
       display: flex;
       flex-direction: column;
-      gap: 25px;
+      gap: 28px;
+      margin-top: 30px;
     }
 
     .nav-links a {
@@ -95,25 +117,29 @@
       align-items: center;
       text-decoration: none;
       color: var(--dark);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       transition: var(--transition);
-      padding: 10px;
+      padding: 12px 0;
       border-radius: 12px;
       width: 60px;
       text-align: center;
     }
 
     .nav-links a i {
-      font-size: 20px;
-      margin-bottom: 5px;
-      color: var(--primary);
+      font-size: 22px;
+      margin-bottom: 6px;
+      transition: color 0.3s ease;
     }
 
     .nav-links a:hover {
-      background: rgba(42, 127, 95, 0.1);
+      background: rgba(44, 111, 77, 0.12);
       color: var(--primary);
-      transform: translateY(-3px);
+      transform: translateY(-4px);
+    }
+
+    .nav-links a:hover i {
+      color: var(--primary-light);
     }
 
     /* Contenido principal */
@@ -125,7 +151,7 @@
     /* Hero */
     .hero {
       height: 100vh;
-      background: linear-gradient(135deg, var(--primary) 0%, #1e5e45 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, #1a553a 100%);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -134,36 +160,37 @@
       position: relative;
     }
 
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="none" stroke="%233faa85" stroke-width="0.5" opacity="0.1"/></svg>');
-      opacity: 0.3;
-    }
-
     .hero-content {
       max-width: 800px;
       padding: 0 20px;
-      position: relative;
-      z-index: 2;
+    }
+
+    .hero-logo {
+      width: 220px;
+      margin: 0 auto 2.2rem;
+      animation: pulse 4s ease-in-out infinite;
+      border-radius: 20px;
+      box-shadow: 0 12px 36px rgba(0,0,0,0.25);
+      transition: transform 0.4s ease;
+    }
+
+    .hero-logo:hover {
+      transform: scale(1.05);
     }
 
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 3.5rem);
-      margin-bottom: 1.2rem;
+      font-size: 3.4rem;
+      margin-bottom: 1.4rem;
       font-weight: 800;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      text-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      letter-spacing: -0.5px;
     }
 
     .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2rem;
+      font-size: 1.35rem;
+      margin-bottom: 2.2rem;
       opacity: 0.95;
-      max-width: 600px;
+      max-width: 700px;
       margin-left: auto;
       margin-right: auto;
     }
@@ -173,17 +200,19 @@
       padding: 14px 36px;
       background: var(--secondary);
       color: var(--dark);
-      font-weight: bold;
+      font-weight: 700;
+      font-size: 1.1rem;
       border-radius: 50px;
       text-decoration: none;
       transition: var(--transition);
-      box-shadow: 0 4px 15px rgba(249, 168, 37, 0.4);
-      font-size: 1.1rem;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+      letter-spacing: 0.5px;
     }
 
     .btn:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(249, 168, 37, 0.6);
+      transform: translateY(-6px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.3);
+      background: #ffc14d;
     }
 
     /* Sections */
@@ -198,10 +227,10 @@
     }
 
     .section-title h2 {
-      font-size: clamp(2rem, 5vw, 2.6rem);
+      font-size: 2.6rem;
       color: var(--primary);
-      margin-bottom: 1rem;
-      font-weight: 700;
+      margin-bottom: 1.2rem;
+      font-weight: 800;
     }
 
     .section-title::after {
@@ -209,7 +238,7 @@
       display: block;
       width: 80px;
       height: 4px;
-      background: var(--primary);
+      background: var(--secondary);
       margin: 0 auto;
       border-radius: 2px;
     }
@@ -222,68 +251,62 @@
       align-items: center;
     }
 
-    .presentation-text h3 {
-      font-size: 1.8rem;
-      color: var(--primary);
-      margin-bottom: 1.2rem;
-    }
-
     .presentation-text p {
-      color: var(--gray);
-      margin-bottom: 1.5rem;
-      font-size: 1.05rem;
+      margin-bottom: 1.4rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
     }
 
     .presentation-logo {
       width: 100%;
       max-width: 320px;
-      margin: 0 auto;
-      border-radius: 16px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(42, 127, 95, 0.15);
-      transition: transform 0.4s ease;
+      margin: 0 auto;
     }
 
     .presentation-logo img {
       width: 100%;
       height: auto;
-      display: block;
-      transition: transform 0.4s ease;
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .presentation-logo:hover {
-      transform: scale(1.03);
+    .presentation-logo:hover img {
+      transform: scale(1.07) rotate(1.5deg);
     }
 
     /* Cards */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.2rem;
     }
 
     .card {
       background: var(--white);
-      border-radius: 16px;
+      border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.09);
       transition: var(--transition);
-      border: 1px solid rgba(42, 127, 95, 0.08);
+      will-change: transform;
     }
 
     .card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 30px rgba(42, 127, 95, 0.15);
+      transform: translateY(-12px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.18);
     }
 
     .card-img {
-      height: 180px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      height: 220px;
+      background-size: cover;
+      background-position: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 3.5rem;
+      color: var(--white);
+      font-size: 4.2rem;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
 
     .card-content {
@@ -292,172 +315,369 @@
 
     .card h3 {
       color: var(--primary);
-      margin-bottom: 0.8rem;
-      font-size: 1.4rem;
+      margin-bottom: 0.9rem;
+      font-size: 1.5rem;
+      font-weight: 700;
     }
 
     .card p {
       color: var(--gray);
-      font-size: 1rem;
+      font-size: 1.05rem;
+    }
+
+    /* Timeline */
+    .timeline {
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--primary);
+      transform: translateX(-50%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      width: 100%;
+      margin-bottom: 3rem;
+      padding: 0 2rem;
+    }
+
+    .timeline-item:nth-child(odd) {
+      padding-left: calc(50% + 2.5rem);
+      text-align: left;
+    }
+
+    .timeline-item:nth-child(even) {
+      padding-right: calc(50% + 2.5rem);
+      text-align: right;
+    }
+
+    .timeline-content {
+      background: var(--white);
+      padding: 1.8rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .timeline-content::before {
+      content: '';
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      background: var(--secondary);
+      border: 4px solid var(--white);
+      border-radius: 50%;
+      top: 22px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content::before {
+      right: -52px;
+    }
+
+    .timeline-item:nth-child(even) .timeline-content::before {
+      left: -52px;
+    }
+
+    .timeline-content h3 {
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+      font-size: 1.4rem;
+    }
+
+    /* Impacto */
+    #impacto {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a553a 100%);
+      color: white;
+    }
+
+    #impacto .section-title h2 {
+      color: white;
+    }
+
+    #impacto p {
+      font-size: 1.2rem;
+      margin-bottom: 1.2rem;
+      opacity: 0.95;
     }
 
     /* Footer */
     footer {
       background: var(--dark);
-      color: white;
+      color: rgba(255,255,255,0.9);
+      padding: 3.5rem 5%;
       text-align: center;
-      padding: 30px 5%;
-      margin-top: 60px;
+      font-size: 1.05rem;
     }
 
     footer p {
-      opacity: 0.8;
-      font-size: 0.95rem;
+      margin-bottom: 0.6rem;
     }
 
     /* Responsive */
     @media (max-width: 900px) {
+      .timeline::before {
+        left: 30px;
+      }
+      .timeline-item {
+        padding-left: 70px !important;
+        padding-right: 0 !important;
+        text-align: left !important;
+      }
+      .timeline-content::before {
+        left: -32px !important;
+        right: auto !important;
+      }
+      .hero h1 {
+        font-size: 2.6rem;
+      }
       .presentation-content {
         grid-template-columns: 1fr;
         text-align: center;
       }
-
-      .timeline-item:nth-child(odd),
-      .timeline-item:nth-child(even) {
-        padding-left: 2rem !important;
-        padding-right: 2rem !important;
-        text-align: center;
-      }
-
-      .timeline::before {
-        left: 20px;
-      }
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .sidebar {
         width: 70px;
+      }
+      .sidebar .logo img {
+        width: 50px;
       }
       .main-content {
         margin-left: 70px;
       }
-      .hero h1 {
-        font-size: 2.4rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .sidebar {
-        display: none;
-      }
-      .main-content {
-        margin-left: 0;
-      }
       section {
-        padding: 60px 5%;
+        padding: 70px 5%;
+      }
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .hero p {
+        font-size: 1.15rem;
+      }
+      .btn {
+        padding: 12px 28px;
+        font-size: 1rem;
       }
     }
   </style>
 </head>
 <body>
+
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="logo">
-      <img src="https://via.placeholder.com/60/2a7f5f/ffffff?text=CP" alt="Logo">
+      <img src="https://i.postimg.cc/1RqtrZMS/cd895fccd532a3fc72d28a1c0a3317a4-removebg-preview.png" alt="Escudo Colegio Balbino García">
     </div>
-    <nav class="nav-links">
-      <a href="#inicio"><i class="fas fa-home"></i> Inicio</a>
-      <a href="#presentacion"><i class="fas fa-book"></i> Presentación</a>
+    <div class="nav-links">
+      <a href="#presentacion"><i class="fas fa-file-alt"></i> Presentación</a>
       <a href="#proyectos"><i class="fas fa-project-diagram"></i> Proyectos</a>
       <a href="#cronograma"><i class="fas fa-calendar-alt"></i> Cronograma</a>
-      <a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a>
-    </nav>
+      <a href="#impacto"><i class="fas fa-chart-line"></i> Impacto</a>
+    </div>
   </aside>
 
   <!-- Contenido principal -->
-  <main class="main-content">
+  <div class="main-content">
+
     <!-- Hero -->
-    <section class="hero" id="inicio">
+    <section class="hero">
       <div class="hero-content">
+        <img src="https://i.postimg.cc/1RqtrZMS/cd895fccd532a3fc72d28a1c0a3317a4-removebg-preview.png" alt="Escudo Colegio Balbino García" class="hero-logo">
         <h1>Mega Proyecto Colbalgar 2025</h1>
-        <p>Innovación, sostenibilidad y comunidad en un solo esfuerzo estudiantil.</p>
-        <a href="#presentacion" class="btn">Explorar Proyecto</a>
+        <p>Fomentando el emprendimiento en niños y jóvenes para potenciar habilidades y capacidades desde edades tempranas</p>
+        <a href="#proyectos" class="btn">Explorar Proyectos</a>
       </div>
     </section>
 
     <!-- Presentación -->
-    <section id="presentacion">
+    <section id="presentacion" class="hidden">
       <div class="section-title">
-        <h2>Sobre el Proyecto</h2>
+        <h2>Presentación</h2>
       </div>
       <div class="presentation-content">
         <div class="presentation-text">
-          <h3>Transformando ideas en impacto real</h3>
-          <p>El Mega Proyecto Colbalgar 2025 es una iniciativa estudiantil que busca resolver problemas reales de nuestra comunidad mediante soluciones tecnológicas, ecológicas y sociales.</p>
-          <p>Con el apoyo de docentes y la comunidad, nuestros equipos trabajan en prototipos, investigaciones y campañas de concientización.</p>
+          <p>El Mega Proyecto Colbalgar es una propuesta que se presenta a la SECRETARIA DE EDUCACION DE PIEDECUESTA con el fin de propiciar espacios desde la institución a través de la cátedra emprendimiento para que los niños y jóvenes puedan potenciar habilidades y capacidades desde las edades tempranas adquiriendo una cultura empresarial para satisfacer sus necesidades propias y de igual manera se puedan solventar algunos recursos para la institución.</p>
+          <p>Este proyecto busca generar espacios donde existan proyectos creados de acuerdo a los gustos de los estudiantes, que sean incluyentes, que tengan un plan de negocios donde se involucre toda la comunidad educativa y pueda llegar a satisfacer algunas de las necesidades básicas para que tengan espacios teórico-prácticos para el alcance de todos.</p>
         </div>
         <div class="presentation-logo">
-          <img src="https://via.placeholder.com/320x240/2a7f5f/ffffff?text=Colbalgar+2025" alt="Logo del proyecto">
+          <img src="https://i.postimg.cc/1RqtrZMS/cd895fccd532a3fc72d28a1c0a3317a4-removebg-preview.png" alt="Escudo Colegio Balbino García">
         </div>
       </div>
     </section>
 
     <!-- Proyectos -->
-    <section id="proyectos">
+    <section id="proyectos" class="hidden">
       <div class="section-title">
-        <h2>Nuestros Proyectos</h2>
+        <h2>Proyectos del Mega Proyecto</h2>
       </div>
       <div class="cards-grid">
-        <div class="card">
-          <div class="card-img">
-            <i class="fas fa-leaf"></i>
+        <!-- Tarjetas con animación escalonada -->
+        <div class="card hidden" style="animation-delay: 0.1s;">
+          <div class="card-img" style="background: linear-gradient(rgba(44,111,77,0.3), rgba(44,111,77,0.3)), url('https://www.vanguardia.com/resizer/v2/piedecuesta-UMFAZLM75JHHJLT2CDO6JO2TJI.jpg?auth=2e638faa0fa2c564561543763ba00b7df60b0e7ebf70ae8f96c842946c82b42f&smart=true&width=1200&height=800&quality=70');">
+            <i class="fas fa-seedling"></i>
           </div>
           <div class="card-content">
-            <h3>EcoHuerto Escolar</h3>
-            <p>Sistema automatizado de riego y monitoreo para huertos urbanos en la institución.</p>
+            <h3>Huertas Urbanas</h3>
+            <p>Conservación del medio ambiente desde prescolar hasta secundaria. Práctica para técnicos en monitoreo ambiental.</p>
           </div>
         </div>
-        <div class="card">
-          <div class="card-img">
-            <i class="fas fa-recycle"></i>
+
+        <div class="card hidden" style="animation-delay: 0.2s;">
+          <div class="card-img" style="background: linear-gradient(rgba(249,168,37,0.3), rgba(249,168,37,0.3)), url('https://www.hola.com/horizon/landscape/584eb66cb592-recetas-snacks-saludables-comida-real-t.jpg');">
+            <i class="fas fa-utensils"></i>
           </div>
           <div class="card-content">
-            <h3>Reciclaje Inteligente</h3>
-            <p>Contenedores con sensores que clasifican residuos y educan a la comunidad.</p>
+            <h3>Snacks Saludables</h3>
+            <p>Recetas nutritivas preparadas por estudiantes. Etapas productivas para técnicos en cocina. Genera ingresos.</p>
           </div>
         </div>
-        <div class="card">
-          <div class="card-img">
+
+        <div class="card hidden" style="animation-delay: 0.3s;">
+          <div class="card-img" style="background: linear-gradient(rgba(44,111,77,0.3), rgba(44,111,77,0.3)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
             <i class="fas fa-laptop-code"></i>
           </div>
           <div class="card-content">
-            <h3>App Educativa</h3>
-            <p>Plataforma interactiva para reforzar aprendizajes en primaria y secundaria.</p>
+            <h3>Canales de Redes Sociales</h3>
+            <p>Uso adecuado de redes, divulgación de actividades y creación de aplicaciones por parte de técnicos en sistemas.</p>
+          </div>
+        </div>
+
+        <div class="card hidden" style="animation-delay: 0.4s;">
+          <div class="card-img" style="background: linear-gradient(rgba(249,168,37,0.3), rgba(249,168,37,0.3)), url('https://images.unsplash.com/photo-1513364776144-60967b0f800f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <div class="card-content">
+            <h3>Semilleros de Emprendimiento</h3>
+            <p>Capacitaciones para crear empresas o fortalecer las existentes. Incluye formación para padres de familia.</p>
+          </div>
+        </div>
+
+        <div class="card hidden" style="animation-delay: 0.5s;">
+          <div class="card-img" style="background: linear-gradient(rgba(44,111,77,0.3), rgba(44,111,77,0.3)), url('https://images.unsplash.com/photo-1589998059171-988d887df646?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+            <i class="fas fa-book-reader"></i>
+          </div>
+          <div class="card-content">
+            <h3>Centro de Estudios Colbalgar</h3>
+            <p>Espacio para servicio social: asesorías, clubes de lectura y apoyo académico entre estudiantes.</p>
+          </div>
+        </div>
+
+        <div class="card hidden" style="animation-delay: 0.6s;">
+          <div class="card-img" style="background: linear-gradient(rgba(249,168,37,0.3), rgba(249,168,37,0.3)), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <div class="card-content">
+            <h3>Manualidades Emprendedoras</h3>
+            <p>Producción de artesanías, diseños y decoraciones que generen ingresos para los estudiantes.</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Cronograma -->
+    <section id="cronograma" class="hidden">
+      <div class="section-title">
+        <h2>Cronograma de Actividades</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item hidden">
+          <div class="timeline-content">
+            <h3>Fase 1: Julio - Agosto</h3>
+            <p>Capacitación y organización en cada sede de los subproyectos del megaproyecto.</p>
+          </div>
+        </div>
+        <div class="timeline-item hidden">
+          <div class="timeline-content">
+            <h3>Fase 2: Septiembre - Octubre</h3>
+            <p>Ejecución del megaproyecto en todas las sedes del colegio.</p>
+          </div>
+        </div>
+        <div class="timeline-item hidden">
+          <div class="timeline-content">
+            <h3>Fase 3: Noviembre</h3>
+            <p>Presentación a la comunidad del megaproyecto y desarrollo del mismo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Impacto -->
+    <section id="impacto" class="hidden">
+      <div class="section-title">
+        <h2>Impacto del Proyecto</h2>
+      </div>
+      <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+        <p>El impacto del mega proyecto a través del emprendimiento genera expansión económica, apropiación tecnológica, promueve la competencia y con ello la generación de empleo.</p>
+        <p>Los jóvenes desarrollan disciplina, innovación y organización, concentrando su energía en proyectos que los llenan mental y espiritualmente.</p>
+      </div>
+    </section>
+
     <!-- Footer -->
-    <footer id="contacto">
-      <p>© 2025 Mega Proyecto Colbalgar — Colegio Balgar. Todos los derechos reservados.</p>
+    <footer>
+      <p><strong>Colegio Balbino García – Mega Proyecto Colbalgar 2025</strong></p>
+      <p>Presentado por: Sandra Janneth Ramírez Cortés</p>
+      <p>Piedecuesta, Santander – Colombia</p>
+      <p class="copyright">
+        © <span id="current-year">2025</span> Colegio Balbino García. 
+        Todos los derechos reservados. 
+        Prohibida la reproducción total o parcial de este material sin autorización expresa.
+      </p>
     </footer>
-  </main>
+
+  </div>
 
   <script>
-    // Animación al hacer scroll
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
+      // Animación escalonada para tarjetas
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${0.1 + index * 0.1}s`;
+      });
+
+      // Observer para animaciones al hacer scroll
+      const observerOptions = {
+        threshold: 0.15,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('show');
+            entry.target.classList.add("show");
           }
         });
-      }, { threshold: 0.1 });
+      }, observerOptions);
 
-      document.querySelectorAll('section').forEach(section => {
-        section.classList.add('hidden');
-        observer.observe(section);
+      document.querySelectorAll(".hidden").forEach(el => {
+        observer.observe(el);
+      });
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute("href");
+          const target = document.querySelector(targetId);
+          if (target) {
+            const offsetTop = target.offsetTop - 20;
+            window.scrollTo({
+              top: offsetTop,
+              behavior: "smooth"
+            });
+          }
+        });
       });
     });
   </script>
